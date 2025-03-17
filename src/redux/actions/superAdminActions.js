@@ -7,8 +7,8 @@ import {
     fetchAdminsFailure,
   } from "../slices/superAdminSlice";
   
-  // const API_BASE_URL = "http://localhost:5000/api";
-  const API_BASE_URL =  "https://whatsapp-bot-backend-hz1v.onrender.com/api"; // Default fallback for local development
+  const API_BASE_URL = "http://localhost:5000/api";
+  // const API_BASE_URL =  "https://whatsapp-bot-backend-hz1v.onrender.com/api"; // Default fallback for local development
 
 // const API_BASE_URL=`/api`
 
