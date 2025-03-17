@@ -5,9 +5,9 @@ import { Link } from "react-router-dom";
 import ImageCarousel from "./ImageCarousel";
 import logoimg from "../../assets/images/logo-img.png";
 import "animate.css";
-import WOW from "wowjs";
+// import { WOW } from "wowjs";
 
-const logo = new URL("../../assets/images/logo.png", import.meta.url).href;
+import logo from "@/assets/images/logo.png";
 
 
 // const techLogos = [
@@ -21,7 +21,8 @@ const logo = new URL("../../assets/images/logo.png", import.meta.url).href;
 const Home = () => {
   const logoScrollRef = useRef(null);
   useEffect(() => {
-    new WOW.WOW().init();
+    // new WOW().init();
+
   }, []);
 
   useEffect(() => {
