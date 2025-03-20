@@ -2,6 +2,8 @@ import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import AppRouter from "./routes/AppRouter";
 import { setUserFromStorage } from "./redux/slices/authSlice";
+import "@fortawesome/fontawesome-free/css/all.min.css";
+
 
 const Index = () => {
   const dispatch = useDispatch();
