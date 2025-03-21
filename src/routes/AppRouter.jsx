@@ -7,8 +7,6 @@ import PrivateRoute from "./PrivateRoute";
 import AuthRedirect from "./AuthRedirect";
 import Profile from "../pages/admin/Profile";
 import UserDocuments from "../pages/admin/UserDocuments";
-import CommonTable from "../components/CommonTable";
-import NotFound from "../pages/public/NotFound";
 
 const AppRouter = () => {
   return (
@@ -16,7 +14,6 @@ const AppRouter = () => {
       <Routes>
         {/* Public Routes */}
         <Route path="/" element={<Home />} />
-        <Route path="/table" element={<CommonTable />} />
         <Route
           path="/login"
           element={
@@ -32,7 +29,7 @@ const AppRouter = () => {
           element={
             <PrivateRoute>
               <Dashboard />
-            </PrivateRoute>
+             </PrivateRoute>
           }
         />
         <Route
@@ -44,14 +41,15 @@ const AppRouter = () => {
           }
         />
 
-        <Route
-          path="/user-document/:userId"
-          element={
-            <PrivateRoute>
-              <UserDocuments />
-            </PrivateRoute>
-          }
-        />
+<Route
+   path="/user-document/:userId"
+  element={
+    <PrivateRoute>
+      <UserDocuments />
+     </PrivateRoute>
+  }
+/>
+
 
         {/* Private Routes */}
         <Route
@@ -62,9 +60,10 @@ const AppRouter = () => {
             </PrivateRoute>
           }
         />
-        <Route path="*" element={<NotFound />} />
+
       </Routes>
     </Router>
+
   );
 };
 
