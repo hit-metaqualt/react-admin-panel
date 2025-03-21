@@ -23,9 +23,7 @@ import {
 } from "../slices/userSlice";
 import axios from "axios";
 
-// const API_BASE_URL = "http://localhost:5000/api"; // Default fallback for local development
-const API_BASE_URL =  "https://whatsapp-bot-backend-hz1v.onrender.com/api"; // Default fallback for local development
-// const API_BASE_URL=`/api`
+const API_BASE_URL = `${import.meta.env.VITE_API_BASE_URL}/api`;
 
 
 export const createUser = (userData) => async (dispatch) => {
