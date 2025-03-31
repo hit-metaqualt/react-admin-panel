@@ -9,6 +9,7 @@ import { useParams } from "react-router-dom";
 import { fetchUserDocuments } from "../../redux/actions/userActions";
 
 const UserDocuments = () => {
+  const serverBaseUrl = "https://whatsapp-pdf-maker.onrender.com/uploads/";
 
   const dispatch = useDispatch();
   const { userId } = useParams();
@@ -21,7 +22,7 @@ const UserDocuments = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
-  console.log("11111111111111-userId",userId)
+  console.log("11111111111111-userId", userId);
 
   useEffect(() => {
     if (userId && authToken) {
@@ -42,14 +43,16 @@ const UserDocuments = () => {
     }
   };
 
-
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
 
   const documentList = documents[userId]?.data || [];
   const totalPages = Math.ceil(documentList.length / itemsPerPage);
-  const currentDocuments = documentList.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  const currentDocuments = documentList.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   return (
     <>
@@ -76,38 +79,58 @@ const UserDocuments = () => {
               </tr>
             </thead>
             <tbody>
-            {currentDocuments?.length > 0 ? (
-                      currentDocuments.map((doc) => (
-                <tr key={doc._id}>
-                  <td>{doc.name}</td>
-                  <td>{doc._id}</td>
-                  <td>{new Date(doc.uploadedAt).toLocaleDateString()}</td>
-                  <td>
-                    {doc.hasYearWiseData ? (
-                      <span className="badge bg-success">Available</span>
-                    ) : (
-                      <span className="badge bg-secondary">Not Available</span>
-                    )}
-                  </td>
-                  <td>
-                    {doc.hasYearWiseData ? (
-                      <Button variant="info" size="sm" onClick={() => { setSelectedDocument(doc); setShowYearWiseModal(true); }}>
-                        View
+              {currentDocuments.length > 0 ? (
+                currentDocuments.map((doc) => (
+                  <tr key={doc._id}>
+                    <td>{doc.name}</td>
+                    <td>{doc._id}</td>
+                    <td>{new Date(doc.uploadedAt).toLocaleDateString()}</td>
+                    <td>
+                      {doc.yearData?.length > 0 ? (
+                        <span className="badge bg-success">Available</span>
+                      ) : (
+                        <span className="badge bg-secondary">
+                          Not Available
+                        </span>
+                      )}
+                    </td>
+                    <td>
+                      {doc.yearData?.length > 0 ? (
+                        <Button
+                          variant="info"
+                          size="sm"
+                          onClick={() => handleViewYearWiseData(doc)}
+                        >
+                          View
+                        </Button>
+                      ) : (
+                        <span className="text-muted">No Data</span>
+                      )}
+                    </td>
+                    <td>
+                      <Button
+                        variant="info"
+                        size="sm"
+                        onClick={() =>
+                          window.open(
+                            `${serverBaseUrl}${doc.fileUrl}`,
+                            "_blank"
+                          )
+                        }
+                      >
+                        View PDF
                       </Button>
-                    ) : (
-                      <span className="text-muted">No Data</span>
-                    )}
-                  </td>
-                  <td>
-                    <Button variant="info" size="sm" onClick={() => window.open(doc.fileUrl, "_blank")}>
-                      View PDF
-                    </Button>
-                    <a href={doc.fileUrl} download className="btn btn-primary ms-2 p-1 text-white" style={{fontSize:"13px"}}>
-                      Download
-                    </a>
-                  </td>
-                </tr>
-               ))
+                      <a
+                        href={`${serverBaseUrl}${doc.fileUrl}`}
+                        download
+                        className="btn btn-primary ms-2 p-1 text-white"
+                        style={{ fontSize: "13px" }}
+                      >
+                        Download
+                      </a>
+                    </td>
+                  </tr>
+                ))
               ) : (
                 <tr>
                   <td colSpan="6" className="text-center">
@@ -119,40 +142,72 @@ const UserDocuments = () => {
           </Table>
 
           <div className="clearfix">
-                  <div className="hint-text">
-                    Showing <b>{currentDocuments.length}</b> out of <b>{documentList.length}</b>
-                  </div>
-                  <ul className="pagination">
-                    <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
-                      <a href="#" className="page-link" onClick={() => handlePageChange(currentPage - 1)}>
-                        Previous
-                      </a>
-                    </li>
-                    {[...Array(totalPages)].map((_, index) => (
-                      <li key={index} className={`page-item ${currentPage === index + 1 ? "active" : ""}`}>
-                        <a href="#" className="page-link" onClick={() => handlePageChange(index + 1)}>
-                          {index + 1}
-                        </a>
-                      </li>
-                    ))}
-                    <li className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}>
-                      <a href="#" className="page-link" onClick={() => handlePageChange(currentPage + 1)}>
-                        Next
-                      </a>
-                    </li>
-                  </ul>
-                </div>
+            <div className="hint-text">
+              Showing <b>{currentDocuments.length}</b> out of{" "}
+              <b>{documentList.length}</b>
+            </div>
+            <ul className="pagination">
+              <li
+                className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
+              >
+                <a
+                  href="#"
+                  className="page-link"
+                  onClick={() => handlePageChange(currentPage - 1)}
+                >
+                  Previous
+                </a>
+              </li>
+              {[...Array(totalPages)].map((_, index) => (
+                <li
+                  key={index}
+                  className={`page-item ${
+                    currentPage === index + 1 ? "active" : ""
+                  }`}
+                >
+                  <a
+                    href="#"
+                    className="page-link"
+                    onClick={() => handlePageChange(index + 1)}
+                  >
+                    {index + 1}
+                  </a>
+                </li>
+              ))}
+              <li
+                className={`page-item ${
+                  currentPage === totalPages ? "disabled" : ""
+                }`}
+              >
+                <a
+                  href="#"
+                  className="page-link"
+                  onClick={() => handlePageChange(currentPage + 1)}
+                >
+                  Next
+                </a>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
 
-      <DocumentUpload show={showUploadModal} handleClose={() => setShowUploadModal(false)} userId={userId}/>
+      <DocumentUpload
+        show={showUploadModal}
+        handleClose={() => setShowUploadModal(false)}
+        userId={userId}
+      />
 
-      <Modal show={showYearWiseModal} onHide={() => setShowYearWiseModal(false)} size="lg">
+      <Modal
+        show={showYearWiseModal}
+        onHide={() => setShowYearWiseModal(false)}
+        size="lg"
+      >
         <Modal.Header closeButton>
           <Modal.Title>Year-wise Data</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {selectedDocument?.yearWiseData?.length ? (
+          {selectedDocument?.yearData?.length ? (
             <Table striped bordered hover>
               <thead>
                 <tr>
@@ -162,15 +217,30 @@ const UserDocuments = () => {
                 </tr>
               </thead>
               <tbody>
-                {selectedDocument.yearWiseData.map((yearData) => (
-                  <tr key={yearData.id}>
+                {selectedDocument.yearData.map((yearData) => (
+                  <tr key={yearData._id}>
                     <td>{yearData.yearRange}</td>
-                    <td>{new Date(yearData.uploadedAt).toLocaleDateString()}</td>
                     <td>
-                      <Button variant="info" size="sm" className="text-white" onClick={() => window.open(yearData.fileUrl, "_blank")}>
+                      {new Date(yearData.uploadedAt).toLocaleDateString()}
+                    </td>
+                    <td>
+                      <Button
+                        variant="info"
+                        size="sm"
+                        onClick={() =>
+                          window.open(
+                            `${serverBaseUrl}${yearData.fileUrl}`,
+                            "_blank"
+                          )
+                        }
+                      >
                         View
                       </Button>
-                      <a href={yearData.fileUrl} download className="btn btn-primary text-white py-1">
+                      <a
+                        href={`${serverBaseUrl}${yearData.fileUrl}`}
+                        download
+                        className="btn btn-primary text-white py-1"
+                      >
                         Download
                       </a>
                     </td>
