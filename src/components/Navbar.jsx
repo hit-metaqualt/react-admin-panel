@@ -28,14 +28,14 @@ const NavBar = () => {
             <div className="wrapper">
                 <div className="navbar-menu">
                 <div className="menu">
-              <a href="/">
+              <Link to="/">
                 <img src={logo} alt="" className="logo-img" />
-              </a>
+              </Link>
 
               <ul>
-                <li><a href="/dashboard">Home</a></li>
-                <li><a href="#">About Us</a></li>
-                <li><a href="#">Services</a></li>
+                <li><Link to="/dashboard">Home</Link></li>
+                <li><Link to="#">About Us</Link></li>
+                <li><Link to="#">Services</Link></li>
               </ul>
               </div>
 
